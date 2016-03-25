@@ -1,5 +1,7 @@
 #include <inttypes.h>
 
+#define EMULATOR
+
 #define TOTPIXELX       8
 #define TOTPIXELY       16
 
