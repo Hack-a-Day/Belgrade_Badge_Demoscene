@@ -24,8 +24,8 @@ SDL_Renderer *ren;
 #elif ROTATION == RIGHT
 	#define ROT_XX 0
 	#define ROT_YY 0
-	#define ROT_XY 1
-	#define ROT_YX -1
+	#define ROT_XY -1
+	#define ROT_YX 1
 #elif ROTATION == DOWN
 	#define ROT_XX -1
 	#define ROT_YY -1
@@ -34,8 +34,8 @@ SDL_Renderer *ren;
 #elif ROTATION == LEFT
 	#define ROT_XX 0
 	#define ROT_YY 0
-	#define ROT_XY -1
-	#define ROT_YX 1
+	#define ROT_XY 1
+	#define ROT_YX -1
 #endif
 
 //These display size values are specific to the SDL2 emulator
