@@ -23,7 +23,7 @@ If you do not have the hardware on hand, there is a software emulator build usin
 
 Install the SDL2 and SDL2_gfx libraries:
 
-```sudo apt-get install libsdl2-dev sudo apt-get install libsdl2-gfx-dev``` 
+```sudo apt-get install libsdl2-dev libsdl2-gfx-dev``` 
 
 Launch the emulator by typing `make`
 
