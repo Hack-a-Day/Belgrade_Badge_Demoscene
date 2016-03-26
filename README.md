@@ -35,6 +35,10 @@ Controls:
 * RIGHT
 * ESCAPE (closes SDL2 emulator, not use in hardware badge)
 
+### Emulator under OSX
+
+Small Room Labs posted simple [instructions to get this working on OSX](https://github.com/Hack-a-Day/Belgrade_Badge_Demoscene/issues/3)
+
 ## The Badge API (Straight from HaD_Badge.h)
 ```
 /*---- Display Prototypes ----*/
