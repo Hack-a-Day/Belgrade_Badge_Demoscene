@@ -13,6 +13,31 @@ void* nullptr;
 SDL_Window *win;
 SDL_Renderer *ren;
 
+//Which way the display is rotated (which way "up" is)
+#define ROTATION UP
+
+#if ROTATION == UP
+	#define ROT_XX 1
+	#define ROT_YY 1
+	#define ROT_XY 0
+	#define ROT_YX 0
+#elif ROTATION == RIGHT
+	#define ROT_XX 0
+	#define ROT_YY 0
+	#define ROT_XY -1
+	#define ROT_YX 1
+#elif ROTATION == DOWN
+	#define ROT_XX -1
+	#define ROT_YY -1
+	#define ROT_XY 0
+	#define ROT_YX 0
+#elif ROTATION == LEFT
+	#define ROT_XX 0
+	#define ROT_YY 0
+	#define ROT_XY 1
+	#define ROT_YX -1
+#endif
+
 //These display size values are specific to the SDL2 emulator
 #define PIXELRADIUS     8      
 #define PIXELSPACING    5
@@ -51,12 +76,19 @@ void initDisplay(void) {
         printf("SDL_Init Error: %s\n", SDL_GetError());
     }
 
+	int width = 
+        (ROT_XX != 0 ? 1 : 0) * ((TOTPIXELX*(PIXELSPACING+PIXELRADIUS+PIXELRADIUS))+PIXELSPACING) +
+		(ROT_XY != 0 ? 1 : 0) * ((TOTPIXELY*(PIXELSPACING+PIXELRADIUS+PIXELRADIUS))+PIXELSPACING);
+	int height = 
+        (ROT_YY != 0 ? 1 : 0) * ((TOTPIXELY*(PIXELSPACING+PIXELRADIUS+PIXELRADIUS))+PIXELSPACING) +
+		(ROT_YX != 0 ? 1 : 0) * ((TOTPIXELX*(PIXELSPACING+PIXELRADIUS+PIXELRADIUS))+PIXELSPACING);
+
     win = SDL_CreateWindow(
         "sdlTest",
         100,
         100,
-        (TOTPIXELX*(PIXELSPACING+PIXELRADIUS+PIXELRADIUS))+PIXELSPACING,
-        (TOTPIXELY*(PIXELSPACING+PIXELRADIUS+PIXELRADIUS))+PIXELSPACING,
+        width,
+        height,
         SDL_WINDOW_SHOWN);
 
     if (win == nullptr) {
@@ -93,10 +125,20 @@ void displayPixel(uint8_t x, uint8_t y, uint8_t state) {
 void showSDLpixel(uint8_t x, uint8_t y, uint8_t state){
     uint8_t color = GREY;
     if (state) { color = RED; }
+	int newX = (x * ROT_XX) + (y * ROT_XY);
+	int newY = (x * ROT_YX) + (y * ROT_YY);
+	if(ROT_XX + ROT_XY < 0)
+	{
+		newX = (-ROT_XX * (TOTPIXELX - 1)) + (-ROT_XY * (TOTPIXELY - 1)) + newX;
+	}
+	if(ROT_YY + ROT_YX < 0)
+	{
+		newY = (-ROT_YX * (TOTPIXELX - 1)) + (-ROT_YY * (TOTPIXELY - 1)) + newY;
+	}
     filledCircleRGBA(
         ren,
-        (x*(PIXELRADIUS+PIXELRADIUS+PIXELSPACING))+PIXELRADIUS+PIXELSPACING,
-        (y*(PIXELRADIUS+PIXELRADIUS+PIXELSPACING))+PIXELRADIUS+PIXELSPACING,
+        (newX*(PIXELRADIUS+PIXELRADIUS+PIXELSPACING))+PIXELRADIUS+PIXELSPACING,
+        (newY*(PIXELRADIUS+PIXELRADIUS+PIXELSPACING))+PIXELRADIUS+PIXELSPACING,
         PIXELRADIUS,
         colors[color][0],
         colors[color][1],
